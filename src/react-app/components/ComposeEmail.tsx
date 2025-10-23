@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X } from 'lucide-react';
 import { api } from '../lib/api';
 
 interface ComposeEmailProps {
@@ -44,7 +45,7 @@ export default function ComposeEmail({ onSend, onCancel }: ComposeEmailProps) {
       <div className="compose-header">
         <h2>New Message</h2>
         <button onClick={onCancel} className="btn-icon" title="Close">
-          ✕
+          <X size={18} />
         </button>
       </div>
 

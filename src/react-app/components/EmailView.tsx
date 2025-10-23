@@ -1,3 +1,4 @@
+import { Reply, Star, Trash2 } from 'lucide-react';
 import type { Email } from '../lib/api';
 
 interface EmailViewProps {
@@ -24,17 +25,17 @@ export default function EmailView({ email, onDelete, onStar, onReply }: EmailVie
       <div className="email-view-header">
         <div className="email-view-actions">
           <button onClick={onReply} className="btn-icon" title="Reply">
-            ↩️
+            <Reply size={18} />
           </button>
           <button
             onClick={() => onStar(email.id, !email.is_starred)}
             className="btn-icon"
             title={email.is_starred ? 'Unstar' : 'Star'}
           >
-            {email.is_starred ? '⭐' : '☆'}
+            <Star size={18} fill={email.is_starred ? 'currentColor' : 'none'} />
           </button>
           <button onClick={() => onDelete(email.id)} className="btn-icon" title="Delete">
-            🗑️
+            <Trash2 size={18} />
           </button>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 
@@ -40,7 +41,10 @@ export default function Login() {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <h1>📧 My Mail</h1>
+          <h1>
+            <Mail size={32} className="login-icon" />
+            My Mail
+          </h1>
           <p>Modern email client powered by Cloudflare</p>
         </div>
 

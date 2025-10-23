@@ -1,3 +1,4 @@
+import { Star } from 'lucide-react';
 import type { Email } from '../lib/api';
 
 interface EmailListProps {
@@ -66,7 +67,9 @@ export default function EmailList({
                 <span className="email-date">{formatDate(email.received_at)}</span>
               </div>
               <div className="email-subject">
-                {email.is_starred ? '⭐ ' : ''}
+                {email.is_starred && (
+                  <Star size={14} fill="currentColor" className="email-star-icon" />
+                )}
                 {email.subject || '(No subject)'}
               </div>
               <div className="email-preview">

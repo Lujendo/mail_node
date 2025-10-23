@@ -6,11 +6,11 @@ import type { D1Database } from '@cloudflare/workers-types';
  */
 export async function initializeUserFolders(db: D1Database, userId: number): Promise<void> {
   const defaultFolders = [
-    { name: 'Inbox', type: 'inbox', icon: '📥', color: '#3b82f6' },
-    { name: 'Sent', type: 'sent', icon: '📤', color: '#10b981' },
-    { name: 'Drafts', type: 'drafts', icon: '📝', color: '#f59e0b' },
-    { name: 'Trash', type: 'trash', icon: '🗑️', color: '#ef4444' },
-    { name: 'Spam', type: 'spam', icon: '⚠️', color: '#f97316' },
+    { name: 'Inbox', type: 'inbox', icon: null, color: '#3b82f6' },
+    { name: 'Sent', type: 'sent', icon: null, color: '#10b981' },
+    { name: 'Drafts', type: 'drafts', icon: null, color: '#f59e0b' },
+    { name: 'Trash', type: 'trash', icon: null, color: '#ef4444' },
+    { name: 'Spam', type: 'spam', icon: null, color: '#f97316' },
   ];
 
   const stmt = db.prepare(
