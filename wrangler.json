@@ -13,9 +13,9 @@
     "not_found_handling": "single-page-application"
   },
   "vars": {
-    "MAILEROO_API_KEY": "",
-    "MAILEROO_SMTP_USERNAME": "",
-    "JWT_SECRET": ""
+    "MAILEROO_API_KEY": "placeholder_configure_maileroo_later",
+    "MAILEROO_SMTP_USERNAME": "placeholder_configure_maileroo_later",
+    "JWT_SECRET": "15677bbc7b72a2738f0b7f708eaac0f15348cd97443c04e1caaf42379f90d5d9"
   },
   "d1_databases": [
     {
