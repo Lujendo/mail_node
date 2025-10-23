@@ -14,6 +14,16 @@ declare namespace Cloudflare {
 }
 interface Env extends Cloudflare.Env {}
 
+// Extend Hono's Context to include our custom variables
+declare module 'hono' {
+  interface ContextVariableMap {
+    user: {
+      userId: number;
+      email: string;
+    };
+  }
+}
+
 // Begin runtime types
 /*! *****************************************************************************
 Copyright (c) Cloudflare. All rights reserved.

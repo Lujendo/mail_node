@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './components/Login';
 import EmailClient from './components/EmailClient';

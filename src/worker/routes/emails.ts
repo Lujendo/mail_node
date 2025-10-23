@@ -72,7 +72,7 @@ emails.get('/', async (c) => {
 emails.get('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
 
     const email = await c.env.DB.prepare(
       'SELECT * FROM emails WHERE id = ? AND user_id = ?'
@@ -228,7 +228,7 @@ emails.get('/search', async (c) => {
 emails.get('/:id/thread', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
 
     // Get the email to find its thread_id
     const email = await c.env.DB.prepare(
@@ -257,7 +257,7 @@ emails.get('/:id/thread', async (c) => {
 emails.patch('/:id/read', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
     const { isRead } = await c.req.json<{ isRead: boolean }>();
 
     // Verify ownership
@@ -285,7 +285,7 @@ emails.patch('/:id/read', async (c) => {
 emails.patch('/:id/move', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
     const { folderId } = await c.req.json<{ folderId: number }>();
 
     // Verify email ownership
@@ -322,7 +322,7 @@ emails.patch('/:id/move', async (c) => {
 emails.delete('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
     const permanent = c.req.query('permanent') === 'true';
 
     await deleteEmail(c.env.DB, user.userId, emailId, permanent);
@@ -341,7 +341,7 @@ emails.delete('/:id', async (c) => {
 emails.patch('/:id/star', async (c) => {
   try {
     const user = getAuthUser(c);
-    const emailId = parseInt(c.params.id);
+    const emailId = parseInt(c.req.param('id'));
     const { isStarred } = await c.req.json<{ isStarred: boolean }>();
 
     // Verify ownership

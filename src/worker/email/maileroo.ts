@@ -274,7 +274,7 @@ export function htmlToPlainText(html: string): string {
   text = text.replace(/<[^>]+>/g, '');
   
   // Decode HTML entities
-  text = text.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+  text = text.replace(/&#(\d+);/g, (_match, dec) => String.fromCharCode(dec));
   
   // Clean up whitespace
   text = text.replace(/\n\s*\n/g, '\n\n');

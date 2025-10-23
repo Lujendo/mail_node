@@ -88,7 +88,7 @@ folders.post('/', async (c) => {
 folders.patch('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const folderId = parseInt(c.params.id);
+    const folderId = parseInt(c.req.param('id'));
     const { name, color, icon, sortOrder } = await c.req.json<{
       name?: string;
       color?: string;
@@ -158,7 +158,7 @@ folders.patch('/:id', async (c) => {
 folders.delete('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const folderId = parseInt(c.params.id);
+    const folderId = parseInt(c.req.param('id'));
 
     // Verify ownership and type
     const folder = await c.env.DB.prepare(

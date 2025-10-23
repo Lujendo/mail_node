@@ -51,7 +51,7 @@ contacts.get('/', async (c) => {
 contacts.get('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const contactId = parseInt(c.params.id);
+    const contactId = parseInt(c.req.param('id'));
 
     const contact = await c.env.DB.prepare(
       'SELECT * FROM contacts WHERE id = ? AND user_id = ?'
@@ -137,7 +137,7 @@ contacts.post('/', async (c) => {
 contacts.patch('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const contactId = parseInt(c.params.id);
+    const contactId = parseInt(c.req.param('id'));
     const { fullName, firstName, lastName, company, phone, notes, avatarUrl, isFavorite } = await c.req.json<{
       fullName?: string;
       firstName?: string;
@@ -223,7 +223,7 @@ contacts.patch('/:id', async (c) => {
 contacts.delete('/:id', async (c) => {
   try {
     const user = getAuthUser(c);
-    const contactId = parseInt(c.params.id);
+    const contactId = parseInt(c.req.param('id'));
 
     // Verify ownership
     const contact = await c.env.DB.prepare(
