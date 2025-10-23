@@ -170,6 +170,7 @@ class ApiClient {
   }
 
   async sendEmail(data: {
+    from?: { email: string; name?: string };
     to: Array<{ email: string; name?: string }>;
     subject: string;
     html?: string;

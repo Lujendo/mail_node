@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { api } from '../lib/api';
+import { api, type EmailAccount } from '../lib/api';
 
 interface ComposeEmailProps {
   onSend: () => void;
@@ -8,11 +8,32 @@ interface ComposeEmailProps {
 }
 
 export default function ComposeEmail({ onSend, onCancel }: ComposeEmailProps) {
+  const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState('');
+  const [accounts, setAccounts] = useState<EmailAccount[]>([]);
+
+  useEffect(() => {
+    loadAccounts();
+  }, []);
+
+  const loadAccounts = async () => {
+    try {
+      const response = await api.getEmailAccounts();
+      setAccounts(response.accounts);
+
+      // Set default account as "from" if available
+      const defaultAccount = response.accounts.find(acc => acc.is_default);
+      if (defaultAccount) {
+        setFrom(defaultAccount.email);
+      }
+    } catch (err) {
+      console.error('Failed to load accounts:', err);
+    }
+  };
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +48,7 @@ export default function ComposeEmail({ onSend, onCancel }: ComposeEmailProps) {
 
     try {
       await api.sendEmail({
+        from: from ? { email: from } : undefined,
         to: [{ email: to }],
         subject,
         text: body,
@@ -52,6 +74,24 @@ export default function ComposeEmail({ onSend, onCancel }: ComposeEmailProps) {
       {error && <div className="alert alert-error">{error}</div>}
 
       <form onSubmit={handleSend} className="compose-form">
+        {accounts.length > 0 && (
+          <div className="compose-field">
+            <label>From:</label>
+            <select
+              value={from}
+              onChange={(e) => setFrom(e.target.value)}
+              required
+            >
+              <option value="">Select sender...</option>
+              {accounts.map((account) => (
+                <option key={account.id} value={account.email}>
+                  {account.email} {account.is_default ? '(Default)' : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="compose-field">
           <label>To:</label>
           <input

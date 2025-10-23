@@ -113,7 +113,8 @@ emails.get('/:id', async (c) => {
 emails.post('/send', async (c) => {
   try {
     const user = getAuthUser(c);
-    const { to, cc, bcc, subject, html, text, attachments } = await c.req.json<{
+    const { from, to, cc, bcc, subject, html, text, attachments } = await c.req.json<{
+      from?: { email: string; name?: string };
       to: Array<{ email: string; name?: string }>;
       cc?: Array<{ email: string; name?: string }>;
       bcc?: Array<{ email: string; name?: string }>;
@@ -127,13 +128,46 @@ emails.post('/send', async (c) => {
       }>;
     }>();
 
-    // Get user info
-    const userInfo = await c.env.DB.prepare('SELECT email, full_name FROM users WHERE id = ?')
-      .bind(user.userId)
-      .first<{ email: string; full_name: string | null }>();
+    // Determine sender
+    let senderEmail: string;
+    let senderName: string | undefined;
 
-    if (!userInfo) {
-      return c.json({ error: 'User not found' }, 404);
+    if (from?.email) {
+      // Verify the user owns this email account
+      const account = await c.env.DB.prepare(
+        'SELECT email, username FROM email_accounts WHERE user_id = ? AND email = ?'
+      )
+        .bind(user.userId, from.email)
+        .first<{ email: string; username: string }>();
+
+      if (account) {
+        senderEmail = account.email;
+        senderName = from.name;
+      } else {
+        // Fall back to user's primary email
+        const userInfo = await c.env.DB.prepare('SELECT email, full_name FROM users WHERE id = ?')
+          .bind(user.userId)
+          .first<{ email: string; full_name: string | null }>();
+
+        if (!userInfo) {
+          return c.json({ error: 'User not found' }, 404);
+        }
+
+        senderEmail = userInfo.email;
+        senderName = userInfo.full_name || undefined;
+      }
+    } else {
+      // Use user's primary email
+      const userInfo = await c.env.DB.prepare('SELECT email, full_name FROM users WHERE id = ?')
+        .bind(user.userId)
+        .first<{ email: string; full_name: string | null }>();
+
+      if (!userInfo) {
+        return c.json({ error: 'User not found' }, 404);
+      }
+
+      senderEmail = userInfo.email;
+      senderName = userInfo.full_name || undefined;
     }
 
     // Send email via Maileroo
@@ -144,8 +178,8 @@ emails.post('/send', async (c) => {
 
     const result = await maileroo.sendEmail({
       from: {
-        email: userInfo.email,
-        name: userInfo.full_name || undefined,
+        email: senderEmail,
+        name: senderName,
       },
       to,
       cc,
@@ -178,8 +212,8 @@ emails.post('/send', async (c) => {
         user.userId,
         sentFolder?.id,
         result.message_id,
-        userInfo.email,
-        userInfo.full_name,
+        senderEmail,
+        senderName,
         to[0].email,
         subject,
         text || '',

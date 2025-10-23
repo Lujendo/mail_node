@@ -86,14 +86,14 @@ export interface InboundEmailWebhook {
  */
 export class MailerooClient {
   private apiKey: string;
-  private baseUrl = 'https://smtp.maileroo.com/api/v1';
+  private baseUrl = 'https://smtp.maileroo.com/api/v2';
 
   constructor(config: MailerooConfig) {
     this.apiKey = config.apiKey;
   }
 
   /**
-   * Send an email via Maileroo API
+   * Send an email via Maileroo API v2
    */
   async sendEmail(request: SendEmailRequest): Promise<SendEmailResponse> {
     try {
@@ -101,7 +101,7 @@ export class MailerooClient {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': this.apiKey,
+          'Authorization': `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
           from: request.from,
@@ -118,19 +118,29 @@ export class MailerooClient {
       });
 
       if (!response.ok) {
-        const error = await response.text();
+        const errorText = await response.text();
+        console.error('Maileroo API error:', errorText);
         return {
           success: false,
-          error: `Failed to send email: ${error}`,
+          error: `Failed to send email (${response.status}): ${errorText}`,
         };
       }
 
-      const data = await response.json() as { message_id: string };
+      const data = await response.json() as { success: boolean; message?: string; data?: { message_id: string } };
+
+      if (!data.success) {
+        return {
+          success: false,
+          error: data.message || 'Failed to send email',
+        };
+      }
+
       return {
         success: true,
-        message_id: data.message_id,
+        message_id: data.data?.message_id,
       };
     } catch (error) {
+      console.error('Maileroo send error:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',
