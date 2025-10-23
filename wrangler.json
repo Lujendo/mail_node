@@ -21,17 +21,17 @@
     {
       "binding": "DB",
       "database_name": "my_mail_db",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+      "database_id": "de9e2a54-9c73-48ba-b007-938fc5119b88"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "KV_CACHE",
-      "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+      "id": "354887b751924cf4a11304d28a95c83b"
     },
     {
       "binding": "KV_SESSIONS",
-      "id": "REPLACE_WITH_YOUR_KV_SESSIONS_ID"
+      "id": "286013e31f5f4d8bb678cb7f79041668"
     }
   ],
   "r2_buckets": [
