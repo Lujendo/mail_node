@@ -1,4 +1,4 @@
-import { Star } from 'lucide-react';
+import { Star, RefreshCw, Paperclip } from 'lucide-react';
 import type { Email } from '../lib/api';
 
 interface EmailListProps {
@@ -38,7 +38,7 @@ export default function EmailList({
       <div className="email-list-header">
         <h2>Emails</h2>
         <button onClick={onRefresh} className="btn-icon" title="Refresh">
-          🔄
+          <RefreshCw size={18} />
         </button>
       </div>
 
@@ -76,7 +76,9 @@ export default function EmailList({
                 {email.body_plaintext?.substring(0, 100) || ''}
               </div>
               {email.has_attachments ? (
-                <div className="email-attachment-badge">📎</div>
+                <div className="email-attachment-badge">
+                  <Paperclip size={16} />
+                </div>
               ) : null}
             </div>
           ))}

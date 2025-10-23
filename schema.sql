@@ -221,12 +221,30 @@ CREATE INDEX IF NOT EXISTS idx_audit_log_user_id ON audit_log(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_log_action ON audit_log(action);
 CREATE INDEX IF NOT EXISTS idx_audit_log_created_at ON audit_log(created_at);
 
+-- Email accounts table for custom domain email support
+CREATE TABLE IF NOT EXISTS email_accounts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  email TEXT NOT NULL,
+  username TEXT NOT NULL,
+  password TEXT NOT NULL, -- Encrypted password
+  imap_server TEXT NOT NULL,
+  smtp_server TEXT NOT NULL,
+  smtp_port INTEGER DEFAULT 587,
+  is_default INTEGER DEFAULT 0, -- 0 = not default, 1 = default
+  created_at INTEGER DEFAULT (unixepoch()),
+  updated_at INTEGER DEFAULT (unixepoch()),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_accounts_user_id ON email_accounts(user_id);
+CREATE INDEX IF NOT EXISTS idx_email_accounts_is_default ON email_accounts(user_id, is_default);
+
 -- Insert default folders for new users (will be done via trigger or application code)
 -- This is just a reference for the default folder structure
--- INSERT INTO folders (user_id, name, type) VALUES 
+-- INSERT INTO folders (user_id, name, type) VALUES
 --   (?, 'Inbox', 'inbox'),
 --   (?, 'Sent', 'sent'),
 --   (?, 'Drafts', 'drafts'),
 --   (?, 'Trash', 'trash'),
 --   (?, 'Spam', 'spam');
-

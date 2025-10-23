@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { Mail, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { api, type Email, type Folder } from '../lib/api';
 import Sidebar from './Sidebar';
 import EmailList from './EmailList';
 import EmailView from './EmailView';
 import ComposeEmail from './ComposeEmail';
+import AccountSettings from './AccountSettings';
 import './EmailClient.css';
 
 export default function EmailClient() {
@@ -14,6 +16,7 @@ export default function EmailClient() {
   const [emails, setEmails] = useState<Email[]>([]);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [isComposing, setIsComposing] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -144,7 +147,10 @@ export default function EmailClient() {
     <div className="email-client">
       <div className="email-header">
         <div className="header-left">
-          <h1>📧 My Mail</h1>
+          <h1>
+            <Mail size={24} className="header-icon" />
+            My Mail
+          </h1>
         </div>
         <div className="header-center">
           <input
@@ -157,6 +163,9 @@ export default function EmailClient() {
         </div>
         <div className="header-right">
           <span className="user-email">{user?.email}</span>
+          <button onClick={() => setShowSettings(true)} className="btn-icon" title="Settings">
+            <Settings size={18} />
+          </button>
           <button onClick={logout} className="btn btn-secondary">
             Logout
           </button>
@@ -180,7 +189,9 @@ export default function EmailClient() {
         />
 
         <div className="email-view-container">
-          {isComposing ? (
+          {showSettings ? (
+            <AccountSettings onClose={() => setShowSettings(false)} />
+          ) : isComposing ? (
             <ComposeEmail onSend={handleSendEmail} onCancel={() => setIsComposing(false)} />
           ) : selectedEmail ? (
             <EmailView

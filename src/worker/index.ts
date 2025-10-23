@@ -5,6 +5,7 @@ import emails from "./routes/emails";
 import webhook from "./routes/webhook";
 import folders from "./routes/folders";
 import contacts from "./routes/contacts";
+import emailAccounts from "./routes/email-accounts";
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -27,6 +28,7 @@ app.route("/api/auth", auth);
 app.route("/api/emails", emails);
 app.route("/api/folders", folders);
 app.route("/api/contacts", contacts);
+app.route("/api/email-accounts", emailAccounts);
 app.route("/api/webhook", webhook);
 
 // 404 handler

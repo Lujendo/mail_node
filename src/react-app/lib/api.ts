@@ -43,6 +43,17 @@ export interface Contact {
   contact_count: number;
 }
 
+export interface EmailAccount {
+  id: number;
+  email: string;
+  username: string;
+  password: string;
+  imap_server: string;
+  smtp_server: string;
+  smtp_port: number;
+  is_default: boolean;
+}
+
 class ApiClient {
   private token: string | null = null;
 
@@ -270,6 +281,37 @@ class ApiClient {
   async deleteContact(id: number) {
     return this.request<{ success: boolean }>(`/contacts/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  // Email Accounts
+  async getEmailAccounts() {
+    return this.request<{ accounts: EmailAccount[] }>('/email-accounts');
+  }
+
+  async addEmailAccount(data: {
+    email: string;
+    username: string;
+    password: string;
+    imap_server: string;
+    smtp_server: string;
+    smtp_port: number;
+  }) {
+    return this.request<{ account: EmailAccount }>('/email-accounts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteEmailAccount(id: number) {
+    return this.request<{ success: boolean }>(`/email-accounts/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async setDefaultEmailAccount(id: number) {
+    return this.request<{ success: boolean }>(`/email-accounts/${id}/set-default`, {
+      method: 'POST',
     });
   }
 }
