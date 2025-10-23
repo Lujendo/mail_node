@@ -125,7 +125,7 @@ export class MailerooClient {
         };
       }
 
-      const data = await response.json();
+      const data = await response.json() as { message_id: string };
       return {
         success: true,
         message_id: data.message_id,
