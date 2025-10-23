@@ -14,8 +14,18 @@
     "publish": true
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "hono": "4.8.2",
+    "imap": "^0.8.19",
+    "jsonwebtoken": "^9.1.2",
     "lucide-react": "^0.546.0",
+    "mailparser": "^3.6.5",
+    "mysql2": "^3.6.5",
+    "nodemailer": "^6.9.7",
+    "pg": "^8.11.3",
     "react": "19.0.0",
     "react-dom": "19.0.0"
   },
@@ -23,7 +33,14 @@
     "@cloudflare/vite-plugin": "1.7.5",
     "@cloudflare/workers-types": "^4.20251014.0",
     "@eslint/js": "9.29.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/imap": "^0.8.40",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/mailparser": "^3.4.4",
     "@types/node": "24.0.4",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "5.0.0",
@@ -38,10 +55,12 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
+    "build:server": "tsc --project tsconfig.server.json",
     "cf-typegen": "wrangler types",
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "vite",
+    "dev:server": "ts-node src/server/index.ts",
     "lint": "eslint .",
     "preview": "npm run build && vite preview",
     "setup": "bash scripts/setup.sh",
@@ -49,7 +68,8 @@
     "db:init": "wrangler d1 execute my_mail_db --file=./schema.sql",
     "db:migrate": "wrangler d1 execute my_mail_db --file=./schema.sql",
     "logs": "wrangler tail",
-    "secret:set": "wrangler secret put"
+    "secret:set": "wrangler secret put",
+    "start": "node dist/server/index.js"
   },
   "type": "module"
 }
