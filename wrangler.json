@@ -11,5 +11,33 @@
   "assets": {
     "directory": "./dist/client",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "vars": {
+    "MAILEROO_API_KEY": "",
+    "MAILEROO_SMTP_USERNAME": "",
+    "JWT_SECRET": ""
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "my_mail_db",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV_CACHE",
+      "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+    },
+    {
+      "binding": "KV_SESSIONS",
+      "id": "REPLACE_WITH_YOUR_KV_SESSIONS_ID"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2_ATTACHMENTS",
+      "bucket_name": "my-mail-attachments"
+    }
+  ]
 }

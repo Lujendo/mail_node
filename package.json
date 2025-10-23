@@ -1,6 +1,7 @@
 {
   "name": "my-mail",
-  "description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
+  "description": "Modern email client built with React, Cloudflare Workers, and Maileroo API",
+  "version": "1.0.0",
   "private": true,
   "cloudflare": {
     "label": "Vite React Template",
@@ -40,7 +41,13 @@
     "deploy": "wrangler deploy",
     "dev": "vite",
     "lint": "eslint .",
-    "preview": "npm run build && vite preview"
+    "preview": "npm run build && vite preview",
+    "setup": "bash scripts/setup.sh",
+    "setup:win": "powershell -ExecutionPolicy Bypass -File scripts/setup.ps1",
+    "db:init": "wrangler d1 execute my_mail_db --file=./schema.sql",
+    "db:migrate": "wrangler d1 execute my_mail_db --file=./schema.sql",
+    "logs": "wrangler tail",
+    "secret:set": "wrangler secret put"
   },
   "type": "module"
 }

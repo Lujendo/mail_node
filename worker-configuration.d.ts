@@ -3,6 +3,13 @@
 // Runtime types generated with workerd@1.20250617.0 2025-10-08 nodejs_compat
 declare namespace Cloudflare {
 	interface Env {
+		DB: D1Database;
+		KV_CACHE: KVNamespace;
+		KV_SESSIONS: KVNamespace;
+		R2_ATTACHMENTS: R2Bucket;
+		MAILEROO_API_KEY: string;
+		MAILEROO_SMTP_USERNAME: string;
+		JWT_SECRET: string;
 	}
 }
 interface Env extends Cloudflare.Env {}
